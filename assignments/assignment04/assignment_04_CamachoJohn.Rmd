@@ -1,0 +1,142 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+---
+title: "Reporting with R Markdown"
+author: "John Camacho"
+date: '2020-09-27'
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+bibliography: bibliography.bib
+---
+
+# Markdown Basics
+
+## Favorite Foods
+1.Steak 
+2.Pizza
+3.Burrito 
+
+## Images
+image: ![All Cases (Log Plot)](C:/Users/Joslyn/Desktop/John Documents/Data Science Class/DSC520/dsc520\completed\assignment04\plots\10-all-cases-log.png)
+
+
+## Add a 
+“Whether you think you can, or you think you can't – you're right 
+- Henry Ford
+
+## Add an Equation
+$$\sqrt{b^2 - 4ac}$$
+
+## Add a Footnote
+
+[^1:] Great Code
+
+## Add Citations
+"R Markdown has quickly become the preferred means of communicating results from R" [see 'R for Everyone', pp.427]
+"Many of the statistical procedure described in this book are parametric tests based on normal distributions" [see 'Discovering Statistics Using R', pp. 167]
+
+# Inline Code
+```{r, include=FALSE}
+library(ggplot2)
+covid_df <- read.csv("C:/Users/Joslyn/Desktop/John Documents/Data Science Class/DSC520/dsc520/data/nytimes/covid-19-data/us-states.csv")
+california_df <- covid_df[ which( covid_df$state == "California"), ]
+ny_df <- covid_df[ which( covid_df$state == "New York"), ]
+florida_df <- covid_df[ which( covid_df$state == "Florida"), ]
+```
+## NY Times COVID-19 Data
+```{r, echo=FALSE}
+options(scipen=10000)
+ggplot(data=florida_df, aes(x=date, group=1)) +
+  geom_line(aes(y = cases, colour = "Florida")) +
+  geom_line(data=ny_df, aes(y = cases,colour="New York")) +
+  geom_line(data=california_df, aes(y = cases, colour="California")) +
+  scale_colour_manual("",
+                      breaks = c(NULL, NULL, NULL),
+                      values = c("darkred", "darkgreen", "steelblue")) +
+  xlab(" ") + ylab("Cases") + scale_y_log10(limits = c(.7,1e6)) 
+```
+
+## R4DS Height vs Earnings
+```{r, echo=FALSE}
+heights_df <- read.csv("C:/Users/Joslyn/Desktop/John Documents/Data Science Class/DSC520/dsc520/data/r4ds/heights.csv")
+
+ggplot(heights_df, aes(x=height, y=earn, col=sex)) + geom_point() + ggtitle("Height vs. Earnings") + xlab("Height (Inches)") + ylab("Earnings (Dollars)")
+```
+# Tables
+
+
+## Knitr Table with Kable
+```{r, echo=FALSE}
+library(knitr)
+name <- c("Aragon", "Bilbo", "Frodo", "Galadriel", "Sam", "Gandalf", "Legolas", "Sauron", "Gollum")
+race <- c("Men", "Hobbit", "Hobbit", "Elf", "Hobbit", "Maia", "Elf", "Maia", "Hobbit")
+in_fellowship <- c(TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE)
+ring_bearer <- c(FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE)
+age <- c(88, 129, 51, 7000, 36, 2019, 2931, 7052, 589)
+
+characters_df <- data.frame(name, race, in_fellowship, ring_bearer, age)
+char_df <- head(characters_df)
+knitr::kable(char_df, caption = "One Ring to Rule Them All")
+
+```
+
+## Pandoc Table
+
+<table>
+<thead>
+<tr>
+  <th>Name</th>
+  <th>Race</th>
+  <th>In Fellowship?</th>
+  <th>Is Ring Bearer?</th>
+  <th>Age</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+  <td>Argon</td>
+  <td>Bilbo</td>
+  <td>Frodo</td>
+  <td>Sam</td>
+  <td>Sauron</td>
+  </tr>
+<tr>
+  <td>Men</td>
+  <td>Hobbit</td>
+  <td>Hobbit</td>
+  <td>Hobbit</td>
+  <td>Maia</td>
+  </tr>
+<tr>
+  <td>Yes</td>
+  <td>No</td>
+  <td>Yes</td>
+  <td>Yes</td>
+  <td>No</td>
+  </tr>
+<tr>
+  <td>No</td>
+  <td>Yes</td>
+  <td>Yes</td>
+  <td>Yes</td>
+  <td>Yes</td>
+  </tr>
+<tr>
+  <td>88</td>
+  <td>129</td>
+  <td>51</td>
+  <td>36</td>
+  <td>7052</td>
+  </tr>
+</tr>
+</tbody>
+</table>
+
+# References
