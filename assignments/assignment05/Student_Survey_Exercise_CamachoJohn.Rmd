@@ -1,0 +1,158 @@
+---
+output: 
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+---
+title: "Student Survey Exercise: John Camacho"
+author: "John Camacho"
+date: '2020-10-05'
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+# Covariance
+
+- Use R to calculate the covariance of the Survey variables
+
+```{r, include=FALSE}
+library(ggplot2)
+library(GGally)
+library(Rcmdr)
+library(knitr)
+library(Hmisc)
+## Setting the working directory to the root of myr DSC 520 directory
+setwd("C:/Users/Joslyn/Desktop/John Documents/Data Science Class/DSC520/dsc520/data")
+
+
+## Loading the student-survey data
+student_survey <- read.csv("C:/Users/Joslyn/Desktop/John Documents/Data Science Class/DSC520/dsc520/data/student-survey.csv")
+```
+```{r, echo=FALSE}
+cov(student_survey[,c("Gender","Happiness","TimeReading","TimeTV")], 
+    use="complete")
+```
+- Provide an explanation of why you would use this calculation and what the results indicate.
+- The covariance calculation is the easiest way to determine if two variables are associated with each other. 
+- Based on the results.  Happiness seems to have a positive covariance with TimeTV and a negative covariance with Time Reading. Time Reading and Time Tv seems to have a negative covariance to each other. 
+
+# Examine the Survey Data Variables
+
+- What measurement is being used for the variables?
+- A. The measurement that is being used for these variables is the amount of time each participant either watches TV or reads.  In addition, it measures each participants level of happiness.
+- Explain what effect changing the measurement being used for the variables would have on the covariance calculation. Would this be a problem? Explain and provide a better alternative if needed.
+- The greatest change that can be done is changing the time measurement for TV and reading.  It's unknown if that is hours or minutes.  However, if you change it to minutes you can get a more accurate time spent on the task.  This would cause changes in the happiness measurement. The other question is reading how happiness is being calculated and collected. 
+
+# Correlation Test Type
+
+- Choose the type of correlation test to perform, explain why you chose this test, and make a prediction if the test yields a positive or negative correlation?
+- I choose to do the Pearson correlation coefficient calculation 
+- The reason I choose Pearson's mainly due to its popularity with this type of calculation.  In addition it will create a value from -1 to 1 which will help indicate either a positive correlation or a negative correlation 
+- I predict that Time Reading and TV time will have a negative correlation. My reason for this is you can only do one or the other at the same time.  My guess is that Reading will provide more happiness than watching TV, this is based on how I feel when I read compared to watching TV. 
+
+
+
+
+# Correlation Analysis
+
+- Correlation Calculation using Pearson 
+```{r, echo=FALSE}
+cor(student_survey[,c("Gender","Happiness","TimeReading","TimeTV")], 
+   use="complete", method = "pearson")
+```
+- Computing correlation for Time Reading Reading - Order: Happiness, Time TV and Gender
+```{r, echo=FALSE}
+cor(student_survey$TimeReading, student_survey$Happiness, use = "complete", method = "pearson")
+cor(student_survey$TimeReading, student_survey$TimeTV, use = "complete", method = "pearson")
+cor(student_survey$TimeReading, student_survey$Gender, use = "complete", method = "pearson")
+```
+- Compute correlation for TimeTV - Order: Happiness, Time Reading and Gender
+```{r, echo=FALSE}
+cor(student_survey$TimeTV, student_survey$Happiness, use = "complete", method = "pearson")
+cor(student_survey$TimeTV, student_survey$TimeReading, use = "complete", method = "pearson")
+cor(student_survey$TimeTV, student_survey$Gender, use = "complete", method = "pearson")
+```
+- Computing correlation for Gender - Order: Happiness, Time Reading and Time TV
+```{r, echo=FALSE}
+cor(student_survey$Gender, student_survey$Happiness, use = "complete", method = "pearson")
+cor(student_survey$Gender, student_survey$TimeReading, use = "complete", method = "pearson")
+cor(student_survey$Gender, student_survey$TimeTV, use = "complete", method = "pearson")
+```
+- Computing correlation for Happiness - Order: Gender, Time Reading and Time TV
+```{r, echo=FALSE}
+cor(student_survey$Happiness, student_survey$Gender, use = "complete", method = "pearson")
+cor(student_survey$Happiness, student_survey$TimeReading, use = "complete", method = "pearson")
+cor(student_survey$Happiness, student_survey$TimeTV, use = "complete", method = "pearson")
+```
+
+
+
+## Repeat your correlation test in step 2 but set the confidence interval at 99%
+
+- Computing correlation for Time Reading Reading using 95% confidence: - Order: Happiness, Time TV and Gender
+```{r, echo=FALSE}
+cor.test(student_survey$TimeReading, student_survey$Happiness, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$TimeReading, student_survey$TimeTV, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$TimeReading, student_survey$Gender, use = "complete", method = "pearson", conf.level = 0.95)
+```
+- Compute correlation for TimeTV using 95% confidence: - Order: Happiness, Time Reading and Gender
+```{r, echo=FALSE}
+cor.test(student_survey$TimeTV, student_survey$Happiness, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$TimeTV, student_survey$TimeReading, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$TimeTV, student_survey$Gender, use = "complete", method = "pearson", conf.level = 0.95)
+```
+- Computing correlation for Gender using 95% confidence: - Order: Happiness, Time Reading and Time TV
+```{r, echo=FALSE}
+cor.test(student_survey$Gender, student_survey$Happiness, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$Gender, student_survey$TimeReading, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$Gender, student_survey$TimeTV, use = "complete", method = "pearson", conf.level = 0.95)
+```
+- Computing correlation for Happiness using 95% confidence: - Order: Gender, Time Reading and Time TV
+```{r, echo=FALSE}
+cor.test(student_survey$Happiness, student_survey$Gender, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$Happiness, student_survey$TimeReading, use = "complete", method = "pearson", conf.level = 0.95)
+cor.test(student_survey$Happiness, student_survey$TimeTV, use = "complete", method = "pearson", conf.level = 0.95)
+```
+- Correlation Matrix
+```{r, echo=FALSE}
+student_survey_matrix <- as.matrix(student_survey[,c("Gender","Happiness","TimeReading","TimeTV")])
+rcorr(student_survey_matrix)
+```
+- Describe what the calculations in the correlation matrix suggest 
+- There are a couple of things that the correlation matrix suggests. First, is Gender seemed to have little correlation with any other variables.  This seems to make sense  
+- Another observation is that Time reading and time TV had a negative correlation.  This would make sense as you really can't do both effectively.  
+- Finally, happiness had a positive correlation with Time TV.  When compared to happiness and Time Reading, these two vaiables had a negative correlation. 
+
+# Calculate the correlation coefficient and the coefficient of determination.
+
+- Correlation of coefficient
+```{r, echo=FALSE}
+rcorr(student_survey_matrix)
+```
+- Coefficient of determination 
+```{r, echo=FALSE}
+cor(student_survey)^2
+```
+- What can you conclude about the results?
+- I can first conclude my belief that a lot of participants do both reading and TV time.  The percentage together was 77.9%
+- I can also conclude that Time watching tv had a higher impact to happiness than reading: 40.5% compared to 18.9%.  However, neither of them had a large impact on happiness which means there are other factors that impact happiness. 
+- I also confirmed that Gender had little impact on any of the variables. 
+
+# Based on your analysis can you say that watching more TV caused students to read less? Explain.
+
+- Yes, when the correlation was ran their was a very negative correlation between the two variables. I would say this makes sense both on a data perspective but also on a qualitative analysis as well.  It would make sense
+because you tend not to do both watch TV and Read.  It tends to be something you do without the other. 
+
+# Pick three variables and perform a partial correlation, documenting which variable you are “controlling”. 
+- Removing Gender from the test and controlling the Time TV variable
+```{r, echo=FALSE}
+partial.cor(student_survey[,c("Happiness","TimeReading","TimeTV")], 
+            use="complete")
+```
+- Explain how this changes your interpretation and explanation of the results.
+- I decided to run the calculation this way for two reasons.  1. I decided not to include Gender because the data is not suggesting there is any correlation with the other variables. 2. I wanted to control the TimeTv because I wanted to truly see how Time reading impacts happiness.  I found it odd that it had a negative correlation prior. 
+- When I ran the partial tests and controlled Time TV, I found that time reading and happiness did have a positive impact. It now has a positive correlation of .351 this is a big change from -.434.  I think what I can take from this, is that when the participants factor out the idea of watching TV compared to reading.  The participants find reading to have a positive impact on their happiness. 
